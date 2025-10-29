@@ -96,6 +96,23 @@
         align-items: center;
         gap: .5rem;
     }
+
+    .btn-view-details {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: .4rem .9rem;
+        border-radius: .5rem;
+        font-weight: 600;
+        font-size: .85rem;
+        transition: all .3s ease;
+        white-space: nowrap;
+    }
+
+        .btn-view-details:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
 </style>
 
 <div class="page-header">
@@ -140,12 +157,13 @@ else
                     <th>CreatedAt</th>
                     <th>SLA MailBy</th>
                     <th>Carrier</th>
+                    <th class="text-center">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @if (!Filtered.Any())
                 {
-                    <tr><td colspan="8" class="text-center text-muted py-4">No results</td></tr>
+                    <tr><td colspan="9" class="text-center text-muted py-4">No results</td></tr>
                 }
                 else
                 {
@@ -168,6 +186,12 @@ else
                                 </span>
                             </td>
                             <td>@p.Carrier</td>
+                            <td class="text-center">
+                                <button class="btn btn-view-details"
+                                        @onclick="@(() => NavigateToDetail(p.Id))">
+                                    View Details
+                                </button>
+                            </td>
                         </tr>
                     }
                 }
@@ -201,6 +225,11 @@ else
     private void NavigateToCreate()
     {
         Navigation.NavigateTo("/create");
+    }
+
+    private void NavigateToDetail(int jobId)
+    {
+        Navigation.NavigateTo($"/job/{jobId}");
     }
 
     private static string Norm(string? s) => (s ?? string.Empty).Trim();

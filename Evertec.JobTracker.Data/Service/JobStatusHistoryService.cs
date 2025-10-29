@@ -16,19 +16,19 @@ namespace Evertec.JobTracker.Data.Service
 
         public async Task<int> CreateAsync(JobStatusHistory p)
         {
-            _db.JobStatusHistories.Add(p);
+            _db.JobStatusHistory.Add(p);
             await _db.SaveChangesAsync();
             return p.Id;
         }
 
         public Task<List<JobStatusHistory>> GetAllAsync()
         {
-            return _db.JobStatusHistories.AsNoTracking().OrderByDescending(p => p.ChangedAt).ToListAsync();
+            return _db.JobStatusHistory.AsNoTracking().OrderByDescending(p => p.ChangedAt).ToListAsync();
         }
 
         public Task<List<JobStatusHistory>> GetByJobIdAsync(int jobId)
         {
-            return _db.JobStatusHistories
+            return _db.JobStatusHistory
              .AsNoTracking()
              .Where(h => h.JobId == jobId)
              .OrderByDescending(h => h.ChangedAt)
