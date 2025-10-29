@@ -50,5 +50,63 @@ namespace Evertec.JobTracker.Data.Service
         {
             return _db.Jobs.AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
+
+        public async Task<string> AdvanceToNextStatusAsync(int jobId)
+        {
+            string[] flow = { "Received", "Printing", "Inserting", "Mailed", "Delivered" };
+
+            using var tx = await _db.Database.BeginTransactionAsync();
+
+            var job = await _db.Jobs.SingleOrDefaultAsync(j => j.Id == jobId);
+            if (job is null) throw new InvalidOperationException($"Job {jobId} not found.");
+
+            var cur = (job.CurrentStatus ?? string.Empty).Trim();
+            var curIndex = Array.IndexOf(flow, cur);
+
+            if (curIndex < 0) throw new InvalidOperationException($"Invalid current status '{job.CurrentStatus}'.");
+            if (curIndex >= flow.Length - 1)
+                throw new InvalidOperationException("Job is already at the final status (Delivered).");
+
+            var next = flow[curIndex + 1];
+
+            job.CurrentStatus = next;
+            await _db.SaveChangesAsync();
+
+            _db.JobStatusHistory.Add(new JobStatusHistory
+            {
+                JobId = job.Id,
+                Status = next,
+                Note = $"Status automatically progressed from {cur}",
+                ChangedAt = DateTime.UtcNow
+            });
+            await _db.SaveChangesAsync();
+
+            await tx.CommitAsync();
+
+            return job.CurrentStatus;
+        }
+
+        public async Task SetExceptionStatusAsync(int jobId, string note)
+        {
+            using var tx = await _db.Database.BeginTransactionAsync();
+
+            var job = await _db.Jobs.SingleOrDefaultAsync(j => j.Id == jobId);
+            if (job is null) throw new InvalidOperationException($"Job {jobId} not found.");
+
+            job.CurrentStatus = "Exception";
+            await _db.SaveChangesAsync();
+
+            _db.JobStatusHistory.Add(new JobStatusHistory
+            {
+                JobId = job.Id,
+                Status = job.CurrentStatus,
+                Note = note,
+                ChangedAt = DateTime.UtcNow
+            });
+            await _db.SaveChangesAsync();
+
+            await tx.CommitAsync();
+        }
+
     }
 }
