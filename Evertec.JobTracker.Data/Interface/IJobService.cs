@@ -12,5 +12,7 @@ namespace Evertec.JobTracker.Data.Interface
         Task<List<Job>> GetAllAsync();
         Task<Job?> GetByIdAsync(int id);
         Task<int> CreateAsync(Job p);
+        Task<string> AdvanceToNextStatusAsync(int jobId);
+        Task SetExceptionStatusAsync(int jobId, string note);
     }
 }

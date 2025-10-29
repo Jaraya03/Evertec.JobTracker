@@ -11,6 +11,12 @@
         margin: 0 auto;
     }
 
+    .status-exception {
+        background: #f8d7da; 
+        color: #842029; 
+        border: 1px solid #f5c2c7;
+    }
+
     .page-header {
         display: flex;
         justify-content: space-between;
@@ -301,7 +307,7 @@ else
         @if (!string.IsNullOrEmpty(_errorMessage))
         {
             <div class="alert alert-danger">
-                ✗ @_errorMessage
+                 @_errorMessage
             </div>
         }
 
@@ -346,7 +352,7 @@ else
             <div class="action-buttons">
                 <button class="btn btn-next-status"
                         @onclick="HandleNextStatus"
-                        disabled="@(_isProcessing || _job.CurrentStatus == "Delivered")">
+                        disabled="@(_isProcessing || _job.CurrentStatus.Trim() == "Delivered" || _job.CurrentStatus.Trim() == "Exception")">
                     @if (_isProcessing)
                     {
                         <span class="spinner-border spinner-border-sm me-2"></span>
@@ -354,11 +360,11 @@ else
                     }
                     else
                     {
-                        <span>Next Status →</span>
+                        <span>Next Status -></span>
                     }
                 </button>
                 <button class="btn btn-exception" @onclick="OpenExceptionModal">
-                    ⚠ Exception
+                    Exception
                 </button>
             </div>
         </div>
@@ -491,29 +497,11 @@ else
 
         try
         {
-            var currentIndex = Array.IndexOf(_statusFlow, _job.CurrentStatus);
-            if (currentIndex == -1 || currentIndex >= _statusFlow.Length - 1)
-            {
-                _errorMessage = "Job is already at the final status.";
-                return;
-            }
+            string newStatus = await JobService.AdvanceToNextStatusAsync(_job.Id);
 
-            var nextStatus = _statusFlow[currentIndex + 1];
+            _successMessage = $"Status updated to {newStatus}!";
 
-            var historyEntry = new JobStatusHistory
-                {
-                    JobId = _job.Id,
-                    Status = nextStatus,
-                    Note = $"Status automatically progressed from {_job.CurrentStatus}",
-                    ChangedAt = DateTime.Now
-                };
-
-            //await JobService.UpdateJobStatusAsync(_job.Id, nextStatus, historyEntry);
-
-            _job.CurrentStatus = nextStatus;
-            _successMessage = $"Status updated to {nextStatus}!";
-
-            _history = await HistoryService.GetByJobIdAsync(JobId);
+            await LoadJobData();
         }
         catch (Exception ex)
         {
@@ -547,20 +535,15 @@ else
 
         try
         {
-            var historyEntry = new JobStatusHistory
-                {
-                    JobId = _job.Id,
-                    Status = _job.CurrentStatus,
-                    Note = $"EXCEPTION: {_exceptionNote}",
-                    ChangedAt = DateTime.Now
-                };
-
+            
+            await JobService.SetExceptionStatusAsync(_job.Id, _exceptionNote);
 
             _successMessage = "Exception reported successfully!";
             _showExceptionModal = false;
             _exceptionNote = string.Empty;
 
-            _history = await HistoryService.GetByJobIdAsync(JobId);
+            await LoadJobData();
+
         }
         catch (Exception ex)
         {
