@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evertec.JobTracker.Web", "Evertec.JobTracker\Evertec.JobTracker.Web.csproj", "{8EE19F20-83A7-49E8-BDE9-7A81017C948A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evertec.JobTracker.Web", "Evertec.JobTracker\Evertec.JobTracker.Web.csproj", "{8EE19F20-83A7-49E8-BDE9-7A81017C948A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Evertec.JobTracker.Data", "Evertec.JobTracker.Data\Evertec.JobTracker.Data.csproj", "{8A21F22F-E823-40B5-873F-C4CE1FF9F278}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Evertec.JobTracker.Data", "Evertec.JobTracker.Data\Evertec.JobTracker.Data.csproj", "{8A21F22F-E823-40B5-873F-C4CE1FF9F278}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

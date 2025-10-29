@@ -16,5 +16,6 @@ namespace Evertec.JobTracker.Data.Model
         public string CurrentStatus { get; set; } = string.Empty;
         public DateTime CreatedAt { get; set; }
         public DateTime SLA_MailBy { get; set; }
+
     }
 }
