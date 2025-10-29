@@ -1,0 +1,24 @@
+﻿@page "/"
+@inject IJobService JobService
+
+<h3>Products</h3>
+
+@if (items is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <ul>
+        @foreach (var p in items)
+        {
+            <li>@p.Name - @p.Price</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<Product>? items;
+    protected override async Task OnInitializedAsync()
+        => items = await JobService.GetAllAsync();
+}

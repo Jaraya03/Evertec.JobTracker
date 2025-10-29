@@ -1,0 +1,7 @@
+Add-Content .gitignore ".vs/
+bin/
+obj/
+*.user
+*.suo
+"
+git add .gitignore

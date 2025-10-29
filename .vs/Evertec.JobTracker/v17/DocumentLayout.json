@@ -1,0 +1,149 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker.data\\interface\\ijobstatushistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|solutionrelative:evertec.jobtracker.data\\interface\\ijobstatushistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EE19F20-83A7-49E8-BDE9-7A81017C948A}|Evertec.JobTracker\\Evertec.JobTracker.Web.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{8EE19F20-83A7-49E8-BDE9-7A81017C948A}|Evertec.JobTracker\\Evertec.JobTracker.Web.csproj|solutionrelative:evertec.jobtracker\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EE19F20-83A7-49E8-BDE9-7A81017C948A}|Evertec.JobTracker\\Evertec.JobTracker.Web.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{8EE19F20-83A7-49E8-BDE9-7A81017C948A}|Evertec.JobTracker\\Evertec.JobTracker.Web.csproj|solutionrelative:evertec.jobtracker\\components\\pages\\home.razor||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8EE19F20-83A7-49E8-BDE9-7A81017C948A}|Evertec.JobTracker\\Evertec.JobTracker.Web.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8EE19F20-83A7-49E8-BDE9-7A81017C948A}|Evertec.JobTracker\\Evertec.JobTracker.Web.csproj|solutionrelative:evertec.jobtracker\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker.data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|solutionrelative:evertec.jobtracker.data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker.data\\interface\\ijobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|solutionrelative:evertec.jobtracker.data\\interface\\ijobservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|c:\\users\\jlap0\\documents\\github\\evertec.jobtracker\\evertec.jobtracker.data\\service\\jobstatushistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A21F22F-E823-40B5-873F-C4CE1FF9F278}|Evertec.JobTracker.Data\\Evertec.JobTracker.Data.csproj|solutionrelative:evertec.jobtracker.data\\service\\jobstatushistoryservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 179,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker\\appsettings.json",
+              "RelativeDocumentMoniker": "Evertec.JobTracker\\appsettings.json",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker\\appsettings.json",
+              "RelativeToolTip": "Evertec.JobTracker\\appsettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-29T18:23:51.952Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Home.razor",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker\\Components\\Pages\\Home.razor",
+              "RelativeDocumentMoniker": "Evertec.JobTracker\\Components\\Pages\\Home.razor",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker\\Components\\Pages\\Home.razor",
+              "RelativeToolTip": "Evertec.JobTracker\\Components\\Pages\\Home.razor",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-29T18:22:20.376Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker\\Program.cs",
+              "RelativeDocumentMoniker": "Evertec.JobTracker\\Program.cs",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker\\Program.cs",
+              "RelativeToolTip": "Evertec.JobTracker\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:14:43.342Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Evertec.JobTracker.Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\AppDbContext.cs",
+              "RelativeToolTip": "Evertec.JobTracker.Data\\AppDbContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:14:38.118Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedWidth": 221,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "IJobService.cs",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\Interface\\IJobService.cs",
+              "RelativeDocumentMoniker": "Evertec.JobTracker.Data\\Interface\\IJobService.cs",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\Interface\\IJobService.cs",
+              "RelativeToolTip": "Evertec.JobTracker.Data\\Interface\\IJobService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:21:17.022Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "IJobStatusHistoryService.cs",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\Interface\\IJobStatusHistoryService.cs",
+              "RelativeDocumentMoniker": "Evertec.JobTracker.Data\\Interface\\IJobStatusHistoryService.cs",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\Interface\\IJobStatusHistoryService.cs",
+              "RelativeToolTip": "Evertec.JobTracker.Data\\Interface\\IJobStatusHistoryService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:14:03.614Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "JobStatusHistoryService.cs",
+              "DocumentMoniker": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\Service\\JobStatusHistoryService.cs",
+              "RelativeDocumentMoniker": "Evertec.JobTracker.Data\\Service\\JobStatusHistoryService.cs",
+              "ToolTip": "C:\\Users\\jlap0\\Documents\\GitHub\\Evertec.JobTracker\\Evertec.JobTracker.Data\\Service\\JobStatusHistoryService.cs",
+              "RelativeToolTip": "Evertec.JobTracker.Data\\Service\\JobStatusHistoryService.cs",
+              "ViewState": "AQIAAAEAAAAAAAAAAAAAACQAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-29T18:10:39.562Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
