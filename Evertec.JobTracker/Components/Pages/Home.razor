@@ -1,24 +1,217 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@using Evertec.JobTracker.Data.Model
 @inject IJobService JobService
+@inject NavigationManager Navigation
 
-<h3>Products</h3>
+<style>
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+    }
 
-@if (items is null)
+    .page-title {
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: .2px;
+    }
+
+    .btn-create {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: .6rem 1.5rem;
+        border-radius: .8rem;
+        font-weight: 600;
+        transition: all .3s ease;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        display: inline-block;
+    }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+    .toolbar {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        margin-bottom: .75rem;
+    }
+
+    .status-select {
+        max-width: 220px;
+        border-radius: .6rem;
+        padding: .45rem .75rem;
+    }
+
+    .table-card {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0,0,0,.08);
+        overflow: auto;
+    }
+
+    .jobs-table {
+        margin: 0;
+    }
+
+        .jobs-table thead th {
+            position: sticky;
+            top: 0;
+            background: #f8f9fa;
+            z-index: 1;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: .78rem;
+            letter-spacing: .04em;
+        }
+
+        .jobs-table th, .jobs-table td {
+            padding: .8rem 1rem;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .jobs-table tbody tr:hover {
+            background: #f6f9ff;
+        }
+
+        .jobs-table .id-col {
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+    .text-truncate {
+        max-width: 340px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .loading {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+    }
+</style>
+
+<div class="page-header">
+    <h3 class="page-title">Job List</h3>
+    <a href="/create" class="btn btn-create" style="text-decoration: none;">
+        + New Job
+    </a>
+</div>
+
+<div class="toolbar">
+    <label class="form-label mb-0 me-2">Status:</label>
+
+    <select class="form-select status-select"
+            @onchange="OnStatusChanged">
+        @foreach (var s in _statusOptions)
+        {
+            <option value="@s" selected="@(_statusFilter == s)">@s</option>
+        }
+    </select>
+
+    <span class="ms-2 text-muted small">Filter: @_statusFilter · Rows: @Filtered.Count()</span>
+</div>
+
+@if (_items is null)
 {
-    <p>Loading...</p>
+    <div class="loading">
+        <div class="spinner-border" role="status"><span class="visually-hidden">Loading…</span></div>
+        <span>Loading jobs…</span>
+    </div>
 }
 else
 {
-    <ul>
-        @foreach (var p in items)
-        {
-            <li>@p.Name - @p.Price</li>
-        }
-    </ul>
+    <div class="table-card">
+        <table class="table table-hover align-middle jobs-table">
+            <thead>
+                <tr>
+                    <th>JobId</th>
+                    <th>ClientName</th>
+                    <th>JobName</th>
+                    <th class="text-end">Quantity</th>
+                    <th>CurrentStatus</th>
+                    <th>CreatedAt</th>
+                    <th>SLA MailBy</th>
+                    <th>Carrier</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (!Filtered.Any())
+                {
+                    <tr><td colspan="8" class="text-center text-muted py-4">No results</td></tr>
+                }
+                else
+                {
+                    @foreach (var p in Filtered)
+                    {
+                        <tr>
+                            <td class="id-col">@p.Id</td>
+                            <td>@p.ClientName</td>
+                            <td class="text-truncate">@p.JobName</td>
+                            <td class="text-end">@p.Quantity.ToString("N0")</td>
+                            <td>@p.CurrentStatus</td>
+                            <td>
+                                <span title="@p.CreatedAt.ToString("yyyy-MM-dd HH:mm")">
+                                    @p.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </span>
+                            </td>
+                            <td>
+                                <span title="@p.SLA_MailBy.ToString("yyyy-MM-dd HH:mm")">
+                                    @p.SLA_MailBy.ToLocalTime().ToString("dd MMM yyyy")
+                                </span>
+                            </td>
+                            <td>@p.Carrier</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
-    private List<Product>? items;
+    private List<Job>? _items;
+
+    private readonly string[] _statusOptions =
+        new[] { "All", "Received", "Printing", "Inserting", "Mailed", "Delivered" };
+
+    private string _statusFilter = "All";
+
     protected override async Task OnInitializedAsync()
-        => items = await JobService.GetAllAsync();
+        => _items = await JobService.GetAllAsync();
+
+    private List<Job> Filtered =>
+        (_items ?? Enumerable.Empty<Job>())
+            .Where(FilterByStatus)
+            .ToList();
+
+    private void OnStatusChanged(ChangeEventArgs e)
+    {
+        _statusFilter = e.Value?.ToString() ?? "All";
+        StateHasChanged();
+    }
+
+    private void NavigateToCreate()
+    {
+        Navigation.NavigateTo("/create");
+    }
+
+    private static string Norm(string? s) => (s ?? string.Empty).Trim();
+
+    private bool FilterByStatus(Job j)
+    {
+        var filter = Norm(_statusFilter);
+        if (filter.Equals("All", StringComparison.OrdinalIgnoreCase)) return true;
+
+        var cur = Norm(j.CurrentStatus);
+
+        return cur.Equals(filter, StringComparison.OrdinalIgnoreCase);
+    }
 }

@@ -15,6 +15,7 @@ namespace Evertec.JobTracker.Data.Service
         public JobService (AppDbContext db) => _db = db;
         public async Task<int> CreateAsync(Job p)
         {
+            p.Id = 100;
             _db.Jobs.Add(p);
             await _db.SaveChangesAsync();
             return p.Id;
