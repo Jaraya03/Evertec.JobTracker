@@ -12,6 +12,6 @@ namespace Evertec.JobTracker.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Job> Jobs => Set<Job>();
-        public DbSet<JobStatusHistory> JobStatusHistories => Set<JobStatusHistory>();
+        public DbSet<JobStatusHistory> JobStatusHistory => Set<JobStatusHistory>();
     }
 }
