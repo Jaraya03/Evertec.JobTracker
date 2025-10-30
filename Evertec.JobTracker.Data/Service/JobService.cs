@@ -108,5 +108,20 @@ namespace Evertec.JobTracker.Data.Service
             await tx.CommitAsync();
         }
 
+        
+
+        public async Task<Dictionary<string, int>> GetCountsByStatusAsync()
+        {
+            var raw = await _db.Jobs
+            .AsNoTracking()
+            .GroupBy(j => j.CurrentStatus.Trim())
+            .Select(g => new { Status = g.Key, Count = g.Count() })
+            .ToListAsync();
+
+            var keys = new[] { "Received", "Printing", "Inserting", "Mailed", "Delivered", "Exception" };
+            var dict = keys.ToDictionary(k => k.Trim(), k => 0);
+            foreach (var r in raw) dict[r.Status] = r.Count;
+            return dict;
+        }
     }
 }

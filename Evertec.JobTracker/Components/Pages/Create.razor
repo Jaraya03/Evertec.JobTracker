@@ -1,0 +1,175 @@
+﻿@page "/create"
+@rendermode InteractiveServer
+@using Evertec.JobTracker.Data.Model
+@inject IJobService JobService
+@inject NavigationManager Navigation
+
+<style>
+    .create-container { max-width: 800px; margin: 0 auto; }
+    .page-header { margin-bottom: 2rem; }
+    .page-title { margin: 0 0 .5rem 0; font-weight: 700; letter-spacing: .2px; }
+    .page-subtitle { color: #6c757d; margin: 0; }
+    .form-card { background: #fff; border-radius: 1rem; box-shadow: 0 6px 18px rgba(0,0,0,.08); padding: 2rem; }
+    .form-section { margin-bottom: 2rem; }
+    .section-title { font-size: 1rem; font-weight: 600; color: #495057; margin-bottom: 1rem; padding-bottom: .5rem; border-bottom: 2px solid #f0f0f0; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .form-group-full { margin-bottom: 1.5rem; }
+    .form-label { font-weight: 600; color: #495057; margin-bottom: .5rem; font-size: .9rem; }
+    .form-control, .form-select { border-radius: .6rem; border: 1.5px solid #e0e0e0; padding: .65rem .9rem; transition: all .3s ease; }
+    .form-control:focus, .form-select:focus { border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
+    .form-actions { display: flex; gap: 1rem; justify-content: flex-end; margin-top: 2rem; padding-top: 1.5rem; border-top: 2px solid #f0f0f0; }
+    .btn-save { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: .7rem 2rem; border-radius: .8rem; font-weight: 600; transition: all .3s ease; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+    .btn-save:hover:not(:disabled){ transform: translateY(-2px); box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4); }
+    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-cancel { background: #f8f9fa; color: #495057; border: 1.5px solid #dee2e6; padding: .7rem 2rem; border-radius: .8rem; font-weight: 600; transition: all .3s ease; }
+    .btn-cancel:hover { background: #e9ecef; border-color: #adb5bd; }
+    .alert { border-radius: .8rem; border: none; margin-bottom: 1.5rem; }
+    .alert-success { background: #d4edda; color: #155724; }
+    .alert-danger { background: #f8d7da; color: #721c24; }
+    .required { color: #dc3545; }
+    @@media (max-width: 768px){ .form-row { grid-template-columns: 1fr; } }
+</style>
+
+<div class="create-container">
+    <div class="page-header">
+        <h3 class="page-title">Create New Job</h3>
+        <p class="page-subtitle">Fill in the details to create a new job entry</p>
+    </div>
+
+    @if (!string.IsNullOrEmpty(_successMessage))
+    {
+        <div class="alert alert-success">✓ @_successMessage</div>
+    }
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-danger">✗ @_errorMessage</div>
+    }
+
+    <div class="form-card">
+        <EditForm Model="@_newJob" OnValidSubmit="HandleSubmit" FormName="CreateJobForm">
+            <DataAnnotationsValidator />
+
+            <div class="form-section">
+                <h4 class="section-title">Client Information</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Client Name <span class="required">*</span></label>
+                        <InputText @bind-Value="_newJob.ClientName" class="form-control" placeholder="Enter client name" />
+                        <ValidationMessage For="@(() => _newJob.ClientName)" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Carrier <span class="required">*</span></label>
+                        <InputSelect @bind-Value="_newJob.Carrier" class="form-select">
+                            <option value="">Select carrier...</option>
+                            <option value="FedEx">FedEx</option>
+                            <option value="UPS">UPS</option>
+                            <option value="USPS">USPS</option>
+                            <option value="DHL">DHL</option>
+                        </InputSelect>
+                        <ValidationMessage For="@(() => _newJob.Carrier)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4 class="section-title">Job Details</h4>
+                <div class="form-group-full">
+                    <label class="form-label">Job Name <span class="required">*</span></label>
+                    <InputText @bind-Value="_newJob.JobName" class="form-control" placeholder="Enter job name" />
+                    <ValidationMessage For="@(() => _newJob.JobName)" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">Quantity <span class="required">*</span></label>
+                        <InputNumber @bind-Value="_newJob.Quantity" class="form-control" placeholder="0" />
+                        <ValidationMessage For="@(() => _newJob.Quantity)" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4 class="section-title">Dates</h4>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">SLA Mail By <span class="required">*</span></label>
+                        <InputDate @bind-Value="_newJob.SLA_MailBy" class="form-control" />
+                        <ValidationMessage For="@(() => _newJob.SLA_MailBy)" />
+                    </div>
+                    <div></div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" class="btn btn-cancel" @onclick="Cancel">Cancel</button>
+                <button type="submit" class="btn btn-save" disabled="@_isSaving">
+                    @if (_isSaving)
+                    {
+                        <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+                        <span>Saving...</span>
+                    }
+                    else { <span>Save Job</span> }
+                </button>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    [SupplyParameterFromForm]
+    private Job _newJob { get; set; } = new()
+    {
+        CurrentStatus = string.Empty,
+        SLA_MailBy = DateTime.Now.AddDays(3)
+    };
+
+    private bool _isSaving = false;
+    private string _successMessage = string.Empty;
+    private string _errorMessage = string.Empty;
+
+    private async Task HandleSubmit()
+    {
+        _isSaving = true;
+        _errorMessage = string.Empty;
+        _successMessage = string.Empty;
+
+        try
+        {
+            if (string.IsNullOrWhiteSpace(_newJob.ClientName) ||
+                string.IsNullOrWhiteSpace(_newJob.JobName) ||
+                string.IsNullOrWhiteSpace(_newJob.Carrier))
+            {
+                _errorMessage = "Please fill in all required fields.";
+                _isSaving = false;
+                return;
+            }
+            if (_newJob.Quantity <= 0)
+            {
+                _errorMessage = "Quantity must be greater than zero.";
+                _isSaving = false;
+                return;
+            }
+
+            _newJob.CreatedAt = DateTime.Now;     
+            _newJob.CurrentStatus = string.Empty; 
+
+            await JobService.CreateAsync(_newJob);
+
+            _successMessage = "Job created successfully!";
+            StateHasChanged();
+
+            await Task.Delay(1500);
+            Navigation.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            _errorMessage = $"Error creating job: {ex.Message}";
+        }
+        finally
+        {
+            _isSaving = false;
+        }
+    }
+
+    private void Cancel() => Navigation.NavigateTo("/");
+}
