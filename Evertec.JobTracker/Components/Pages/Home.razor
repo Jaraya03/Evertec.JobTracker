@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using Evertec.JobTracker.Data.Model
 @inject IJobService JobService
+@inject IStatusService StatusService
 @inject NavigationManager Navigation
 
 <style>
@@ -117,7 +118,7 @@
 
 <div class="page-header">
     <h3 class="page-title">Job List</h3>
-    <a href="/create" class="btn btn-create" style="text-decoration: none;">
+    <a href="/job/create" class="btn btn-create" style="text-decoration: none;">
         + New Job
     </a>
 </div>
@@ -125,11 +126,10 @@
 <div class="toolbar">
     <label class="form-label mb-0 me-2">Status:</label>
 
-    <select class="form-select status-select"
-            @onchange="OnStatusChanged">
+    <select class="form-select status-select" @onchange="OnStatusChanged">
         @foreach (var s in _statusOptions)
         {
-            <option value="@s" selected="@(_statusFilter == s)">@s</option>
+            <option value="@s.StatusCode" selected="@(_statusFilter == s.StatusCode)">@s.StatusCode</option>
         }
     </select>
 
@@ -203,13 +203,22 @@ else
 @code {
     private List<Job>? _items;
 
-    private readonly string[] _statusOptions =
-        new[] { "All", "Received", "Printing", "Inserting", "Mailed", "Delivered", "Exception" };
+    private List<Status> _statusOptions = new();
 
     private string _statusFilter = "All";
 
     protected override async Task OnInitializedAsync()
-        => _items = await JobService.GetAllAsync();
+    {
+        var statuses = await StatusService.GetAll();
+        _statusOptions = new List<Status>
+        {
+            new Status { StatusCode = "All" }
+        }
+        .Concat(statuses)
+        .ToList();
+
+        _items = await JobService.GetAllAsync();
+    }
 
     private List<Job> Filtered =>
         (_items ?? Enumerable.Empty<Job>())
