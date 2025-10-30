@@ -1,1 +1,244 @@
-﻿
+﻿@page "/dashboard"
+@rendermode InteractiveServer
+@inject IJobService JobService
+
+<style>
+    .dash-container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .page-header {
+        margin-bottom: 1.25rem;
+    }
+
+    .page-title {
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: .2px;
+    }
+
+    .page-subtitle {
+        color: #6c757d;
+        margin: .25rem 0 0 0;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .card {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0,0,0,.08);
+        padding: 1.1rem 1.25rem;
+    }
+
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .95rem;
+        font-weight: 700;
+        margin: 0 0 .35rem 0;
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: #495057;
+    }
+
+    .kpi {
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin: .15rem 0 .6rem 0;
+    }
+
+    .mini-bar {
+        height: 8px;
+        background: #f1f3f5;
+        border-radius: 999px;
+        overflow: hidden;
+    }
+
+        .mini-bar > div {
+            height: 100%;
+            border-radius: 999px;
+        }
+
+    /* Colores por estado (coherentes con tus badges) */
+    .c-received {
+        background: #cfe2ff;
+        color: #084298;
+    }
+
+    .c-printing {
+        background: #fff3cd;
+        color: #997404;
+    }
+
+    .c-inserting {
+        background: #cff4fc;
+        color: #055160;
+    }
+
+    .c-mailed {
+        background: #d1e7dd;
+        color: #0a3622;
+    }
+
+    .c-delivered {
+        background: #d1e7dd;
+        color: #0a3622;
+    }
+
+    .c-exception {
+        background: #f8d7da;
+        color: #842029;
+        border: 1px solid #f5c2c7;
+    }
+
+    .bar-received {
+        background: #a5c5ff;
+    }
+
+    .bar-printing {
+        background: #ffe08a;
+    }
+
+    .bar-inserting {
+        background: #87e2f0;
+    }
+
+    .bar-mailed {
+        background: #7bd3a6;
+    }
+
+    .bar-delivered {
+        background: #59c48d;
+    }
+
+    .bar-exception {
+        background: #f08a92;
+    }
+
+    .section-card {
+        background: #fff;
+        border-radius: 1rem;
+        box-shadow: 0 6px 18px rgba(0,0,0,.08);
+        padding: 1rem 1.25rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        font-weight: 700;
+        color: #495057;
+        margin: 0 0 .75rem 0;
+        padding-bottom: .5rem;
+        border-bottom: 2px solid #f0f0f0;
+    }
+
+    .summary-table thead th {
+        background: #f8f9fa;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: .78rem;
+        letter-spacing: .04em;
+        padding: .7rem 1rem;
+    }
+
+    .summary-table td {
+        padding: .7rem 1rem;
+        vertical-align: middle;
+    }
+
+    .summary-table tbody tr:hover {
+        background: #f6f9ff;
+    }
+
+    @@media (max-width: 768px) {
+        .cards-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="dash-container">
+    <div class="page-header">
+        <h3 class="page-title">Dashboard</h3>
+        <p class="page-subtitle">Overview of Jobs by Status</p>
+    </div>
+
+    @if (_counts is null)
+    {
+        <div class="card" style="display:flex; align-items:center; gap:.6rem;">
+            <div class="spinner-border" role="status"></div>
+            <div>Loading metrics…</div>
+        </div>
+    }
+    else
+    {
+        <div class="cards-grid">
+            @Card("Received", "received", _counts["Received"], _total)
+            @Card("Printing", "printing", _counts["Printing"], _total)
+            @Card("Inserting", "inserting", _counts["Inserting"], _total)
+            @Card("Mailed", "mailed", _counts["Mailed"], _total)
+            @Card("Delivered", "delivered", _counts["Delivered"], _total)
+            @Card("Exception", "exception", _counts["Exception"], _total)
+        </div>
+    }
+</div>
+
+@code {
+    private Dictionary<string, int>? _counts;
+    private int _total;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _counts = await JobService.GetCountsByStatusAsync();
+        _total = _counts.Values.Sum();
+    }
+
+    private RenderFragment Card(string title, string key, int value, int total) => __builder =>
+    {
+        var pct = total > 0 ? (int)Math.Round(value * 100.0 / total) : 0;
+        var chipClass = key switch
+        {
+            "received" => "c-received",
+            "printing" => "c-printing",
+            "inserting" => "c-inserting",
+            "mailed" => "c-mailed",
+            "delivered" => "c-delivered",
+            "exception" => "c-exception",
+            _ => "c-received"
+        };
+        var barClass = key switch
+        {
+            "received" => "bar-received",
+            "printing" => "bar-printing",
+            "inserting" => "bar-inserting",
+            "mailed" => "bar-mailed",
+            "delivered" => "bar-delivered",
+            "exception" => "bar-exception",
+            _ => "bar-received"
+        };
+
+        <div class="card">
+            <div class="card-title">
+                <span class="@chipClass" style="display:inline-block;padding:.2rem .55rem;border-radius:.6rem;">
+                    @title
+                </span>
+            </div>
+            <div class="kpi">@value</div>
+            <div class="mini-bar">
+                <div class="@barClass" style="width:@($"{pct}%")"></div>
+            </div>
+            <div class="text-muted" style="margin-top:.45rem;font-size:.85rem;">
+                @pct% of total
+            </div>
+        </div>
+    };
+
+
+}
