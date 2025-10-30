@@ -12,8 +12,8 @@
     }
 
     .status-exception {
-        background: #f8d7da; 
-        color: #842029; 
+        background: #f8d7da;
+        color: #842029;
         border: 1px solid #f5c2c7;
     }
 
@@ -307,7 +307,7 @@ else
         @if (!string.IsNullOrEmpty(_errorMessage))
         {
             <div class="alert alert-danger">
-                 @_errorMessage
+                @_errorMessage
             </div>
         }
 
@@ -425,8 +425,11 @@ else
                             <label class="form-label">Exception Note</label>
                             <textarea class="form-control"
                                       rows="4"
+                                      maxlength="255"
                                       placeholder="Describe the exception..."
-                                      @bind="_exceptionNote"></textarea>
+                                      @bind="_exceptionNote"
+                                      @oninput="OnNoteInput"></textarea>
+                            <small class="text-muted">@_exceptionNote.Length / 255 characters</small>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -529,13 +532,18 @@ else
     {
         if (_job is null || string.IsNullOrWhiteSpace(_exceptionNote)) return;
 
+        if (_exceptionNote.Length > 255)
+        {
+            _exceptionNote = _exceptionNote.Substring(0, 255);
+        }
+
         _isProcessing = true;
         _errorMessage = string.Empty;
         _successMessage = string.Empty;
 
         try
         {
-            
+
             await JobService.SetExceptionStatusAsync(_job.Id, _exceptionNote);
 
             _successMessage = "Exception reported successfully!";
@@ -553,5 +561,11 @@ else
         {
             _isProcessing = false;
         }
+    }
+
+    private void OnNoteInput(ChangeEventArgs e)
+    {
+        var input = e.Value?.ToString() ?? string.Empty;
+        _exceptionNote = input.Length > 255 ? input.Substring(0, 255) : input;
     }
 }
