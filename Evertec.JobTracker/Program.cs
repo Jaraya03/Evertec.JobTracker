@@ -16,7 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
 
 
 builder.Services.AddScoped<IJobStatusHistoryService, JobStatusHistoryService>();
-builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IStatusService, StatusService>(); builder.Services.AddScoped<IJobService, JobService>();
 
 var app = builder.Build();
 

@@ -53,32 +53,32 @@ namespace Evertec.JobTracker.Data.Service
 
         public async Task<string> AdvanceToNextStatusAsync(int jobId)
         {
-            string[] flow = { "Received", "Printing", "Inserting", "Mailed", "Delivered" };
-
             using var tx = await _db.Database.BeginTransactionAsync();
 
             var job = await _db.Jobs.SingleOrDefaultAsync(j => j.Id == jobId);
             if (job is null) throw new InvalidOperationException($"Job {jobId} not found.");
 
-            var cur = (job.CurrentStatus ?? string.Empty).Trim();
-            var curIndex = Array.IndexOf(flow, cur);
+            var status = await _db.Status.AsNoTracking().ToListAsync();
+            var currentStatus = status.FirstOrDefault(p => p.StatusCode.Trim() == job.CurrentStatus.Trim());
+            var nextStatus = status.FirstOrDefault(p => p.SortOrder == currentStatus.SortOrder + 1);
 
-            if (curIndex < 0) throw new InvalidOperationException($"Invalid current status '{job.CurrentStatus}'.");
-            if (curIndex >= flow.Length - 1)
+            if (nextStatus == null)
+            {
                 throw new InvalidOperationException("Job is already at the final status (Delivered).");
+            }
 
-            var next = flow[curIndex + 1];
-
-            job.CurrentStatus = next;
+            job.CurrentStatus = nextStatus.StatusCode;
             await _db.SaveChangesAsync();
 
             _db.JobStatusHistory.Add(new JobStatusHistory
             {
                 JobId = job.Id,
-                Status = next,
-                Note = $"Status automatically progressed from {cur}",
+                Status = job.CurrentStatus,
+                Note = $"Status automatically progressed from {job.CurrentStatus}",
                 ChangedAt = DateTime.UtcNow
             });
+
+
             await _db.SaveChangesAsync();
 
             await tx.CommitAsync();
